@@ -1,5 +1,6 @@
 package com.dummyjson.testcases;
 
+import com.dummyjson.models.UserInfo;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
@@ -12,20 +13,13 @@ import static org.hamcrest.Matchers.*;
 public class UserTest {
 
 
-
     @Test
     public void LoginUserTC(){
-
-        String body ="{\n" +
-                "    \n" +
-                "    \"username\": \"emilys\",\n" +
-                "    \"password\": \"emilyspass\",\n" +
-                "    \"expiresInMins\": 30\n" +
-                "}";
+        UserInfo user =new UserInfo("emilys","emilyspass",30);
          given().
                 baseUri("https://dummyjson.com")
                 .contentType(ContentType.JSON)
-                 .body(body)
+                 .body(user)
          .when().post("/user/login")
          .then()
                  .log().all()
@@ -37,16 +31,11 @@ public class UserTest {
     @Test
     public void NegativeLoginUserTC(){
 
-        String body ="{\n" +
-                "    \n" +
-                "    \"username\": \"emilys\",\n" +
-                "    \"password\": \"  \",\n" +
-                "    \"expiresInMins\": 30\n" +
-                "}";
+        UserInfo user =new UserInfo("emilys","emilysss",30);
         given().
                 baseUri("https://dummyjson.com")
                 .contentType(ContentType.JSON)
-                .body(body)
+                .body(user)
                 .when().post("/user/login")
                 .then()
                 .log().all()

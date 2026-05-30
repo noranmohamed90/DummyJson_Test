@@ -1,9 +1,12 @@
 package com.dummyjson.testcases;
 
+import com.dummyjson.models.Errors;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class UserActivities {
@@ -11,34 +14,36 @@ public class UserActivities {
     @Test
     public void userCart(){
         int id = 9 ;
-        given().
+        Response response = given().
                 baseUri("https://dummyjson.com")
-                .pathParam("userId", id)
+                .pathParam("cartId", id)
                 .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/carts")
+                .when().get("/users/{cartId}/carts")
                 .then()
                 .log().all()
-                .statusCode(200)
-                .body("carts",notNullValue())
-                .body("carts[0].userId",equalTo(id))
-                .body("total", equalTo(1))
-                .body("skip", equalTo(0))
-                .body("limit", equalTo(1));
-
+                .extract().response();
+         assertThat(response.statusCode(), equalTo(200));
+         assertThat(response.path("carts"), notNullValue());
+         assertThat(response.path("carts[0].cartId"), equalTo(id));
+         assertThat(response.path("total"),  equalTo(1));
+         assertThat(response.path("skip"), equalTo(0));
+         assertThat(response.path("limit"), equalTo(1));
     }
 
     @Test
     public void NegativeUserCart(){
         int id = 999 ;
-        given().
+        Response response = given().
                 baseUri("https://dummyjson.com")
                 .pathParam("userId", id)
                 .contentType(ContentType.JSON)
                 .when().get("/users/{userId}/carts")
                 .then()
                 .log().all()
-                .statusCode(404)
-                .body("message",equalTo("User with id '999' not found"));
+                .extract().response();
+        Errors getResponse =response.body().as(Errors.class);
+        assertThat(response.statusCode(),equalTo(404));
+        assertThat(getResponse.getMessage(),equalTo("User with id '999' not found"));
 
 
     }
@@ -63,15 +68,18 @@ public class UserActivities {
 
     @Test
     public void NegativeUserPosts(){
-        int id = 9 ;
-        given().
+        int id = 999 ;
+         Response response = given().
                 baseUri("https://dummyjson.com")
                 .pathParam("userId", id)
                 .contentType(ContentType.JSON)
-                .when().post("/users/{userId}/posts")
+                .when().get("/users/{userId}/posts")
                 .then()
                 .log().all()
-                .statusCode(404);
+                .extract().response();
+        Errors getResponse =response.body().as(Errors.class);
+        assertThat(response.statusCode(),equalTo(404));
+        assertThat(getResponse.getMessage(),equalTo("User with id '999' not found"));
     }
 
 

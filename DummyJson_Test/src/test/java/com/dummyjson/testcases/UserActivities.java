@@ -1,6 +1,6 @@
 package com.dummyjson.testcases;
 
-import com.dummyjson.models.Errors;
+import com.dummyjson.models.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -22,12 +22,13 @@ public class UserActivities {
                 .then()
                 .log().all()
                 .extract().response();
+        CartResponse returnedResponse = response.body().as(CartResponse.class);
          assertThat(response.statusCode(), equalTo(200));
-         assertThat(response.path("carts"), notNullValue());
-         assertThat(response.path("carts[0].cartId"), equalTo(id));
-         assertThat(response.path("total"),  equalTo(1));
-         assertThat(response.path("skip"), equalTo(0));
-         assertThat(response.path("limit"), equalTo(1));
+         assertThat(returnedResponse.getCarts(), notNullValue());
+        assertThat(returnedResponse.getCarts().get(0).getId(), equalTo(id));
+        assertThat(returnedResponse.getTotal(),  equalTo(1));
+        assertThat(returnedResponse.getSkip(), equalTo(0));
+        assertThat(returnedResponse.getLimit(), equalTo(1));
     }
 
     @Test
@@ -51,18 +52,21 @@ public class UserActivities {
     @Test
     public void userPosts(){
         int id = 9 ;
-        given().
+       Response response =  given().
                 baseUri("https://dummyjson.com")
                 .pathParam("userId", id)
                 .contentType(ContentType.JSON)
                 .when().get("/users/{userId}/posts")
                 .then()
                 .log().all()
-                .statusCode(200)
-                .body("posts",notNullValue())
-                .body("posts.size()", greaterThan(0))
-                .body("posts[0].id", notNullValue())
-                .body("posts[0].title", notNullValue());
+               .extract().response();
+        PostsResponse returnedResponse = response.body().as(PostsResponse.class);
+        assertThat(response.statusCode(), equalTo(200));
+        assertThat(returnedResponse.getPosts(), notNullValue());
+        assertThat(returnedResponse.getPosts().size(), notNullValue());
+        assertThat(returnedResponse.getPosts().get(0).getId(), notNullValue());
+        assertThat(returnedResponse.getPosts().get(0).getTitle(), notNullValue());
+
 
     }
 

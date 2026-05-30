@@ -1,24 +1,23 @@
 package com.dummyjson.models;
 
+import com.dummyjson.models.Post;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CartResponse {
+public class PostsResponse {
 
-
-    private List<Cart> carts;
+    private List<Post> posts;
     private int total;
     private int skip;
     private int limit;
 
-    public List<Cart> getCarts() {
-        return carts;
+    public List<Post> getPosts() {
+        return posts;
     }
 
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public int getTotal() {
@@ -45,6 +44,3 @@ public class CartResponse {
         this.limit = limit;
     }
 }
-
-
-

@@ -4,6 +4,7 @@ import com.dummyjson.apis.userApis;
 import com.dummyjson.models.Errors;
 import com.dummyjson.models.UserInfo;
 import com.dummyjson.models.userResponse;
+import com.dummyjson.utilites.ErrorMessages;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.BeforeMethod;
@@ -39,7 +40,7 @@ public class UserTest {
         Response response = userApis.Login(user);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(400));
-        assertThat(getResponse.getMessage(),equalTo("Invalid credentials"));
+        assertThat(getResponse.getMessage(),equalTo(ErrorMessages.invalidLoginMessage));
     }
     @Test
     public void GetAllUsersTC(){
@@ -71,7 +72,7 @@ public class UserTest {
         Response response = userApis.GatSingleUser(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
-        assertThat(getResponse.getMessage(),equalTo(String.format("User with id '%d' not found", invalidUserId)));
+        assertThat(getResponse.getMessage(),equalTo(String.format(ErrorMessages.invalidUsersMessage, invalidUserId)));
 
     }
 

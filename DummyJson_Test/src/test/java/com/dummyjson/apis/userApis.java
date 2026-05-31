@@ -1,5 +1,6 @@
 package com.dummyjson.apis;
 
+import com.dummyjson.base.Specifications;
 import com.dummyjson.models.UserInfo;
 import com.dummyjson.utilites.Route;
 import io.restassured.http.ContentType;
@@ -11,8 +12,7 @@ public class userApis {
 
     public static Response Login(UserInfo user){
         return given().
-                baseUri("https://dummyjson.com")
-                .contentType(ContentType.JSON)
+                spec(Specifications.getReqSpecifications())
                 .body(user)
                 .when().post(Route.LoginPath)
                 .then()
@@ -23,8 +23,7 @@ public class userApis {
 
     public static Response GatAllUsers(){
         return given().
-                baseUri("https://dummyjson.com")
-                .contentType(ContentType.JSON)
+                spec(Specifications.getReqSpecifications())
                 .when().get(Route.GetAllUsersPath)
                 .then()
                 .log().all()
@@ -33,8 +32,7 @@ public class userApis {
 
     public static Response GatSingleUser( int id){
         return given().
-                baseUri("https://dummyjson.com")
-                .contentType(ContentType.JSON)
+                spec(Specifications.getReqSpecifications())
                 .when().get(Route.GetSingleUserPath +id)
                 .then()
                 .log().all()

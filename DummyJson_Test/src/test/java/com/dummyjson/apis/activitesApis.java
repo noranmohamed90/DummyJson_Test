@@ -1,5 +1,6 @@
 package com.dummyjson.apis;
 
+import com.dummyjson.base.Specifications;
 import com.dummyjson.models.UserInfo;
 import com.dummyjson.utilites.Route;
 import io.restassured.http.ContentType;
@@ -10,9 +11,8 @@ import static io.restassured.RestAssured.given;
 public class activitesApis {
     public static Response UserCart(int id){
         return  given().
-                baseUri("https://dummyjson.com")
+                spec(Specifications.getReqSpecifications())
                 .pathParam("cartId", id)
-                .contentType(ContentType.JSON)
                 .when().get(Route.GetCartsPath)
                 .then()
                 .log().all()
@@ -22,9 +22,8 @@ public class activitesApis {
 
     public static Response UserPosts(int id){
         return   given().
-                baseUri("https://dummyjson.com")
+                spec(Specifications.getReqSpecifications())
                 .pathParam("userId", id)
-                .contentType(ContentType.JSON)
                 .when().get(Route.GetPostsPath)
                 .then()
                 .log().all()

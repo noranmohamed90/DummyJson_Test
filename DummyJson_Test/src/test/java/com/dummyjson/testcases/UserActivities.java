@@ -2,6 +2,7 @@ package com.dummyjson.testcases;
 
 import com.dummyjson.apis.activitesApis;
 import com.dummyjson.models.*;
+import com.dummyjson.utilites.ErrorMessages;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -33,7 +34,7 @@ public class UserActivities {
         Response response = activitesApis.UserCart(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
-        assertThat(getResponse.getMessage(),equalTo(String.format("User with id '%d' not found", invalidUserId)));
+        assertThat(getResponse.getMessage(),equalTo(String.format(ErrorMessages.invalidUsersMessage, invalidUserId)));
 
 
     }
@@ -56,7 +57,7 @@ public class UserActivities {
         Response response = activitesApis.UserPosts(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
-        assertThat(getResponse.getMessage(),equalTo(String.format("User with id '%d' not found", invalidUserId)));
+        assertThat(getResponse.getMessage(),equalTo(String.format(ErrorMessages.invalidUsersMessage, invalidUserId)));
     }
 
 

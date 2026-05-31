@@ -1,31 +1,28 @@
 package com.dummyjson.testcases;
 
+import com.dummyjson.apis.activitesApis;
 import com.dummyjson.models.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.dummyjson.utilites.generateIds.getInvalidRandomUserId;
+import static com.dummyjson.utilites.generateIds.getRandomUserId;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class UserActivities {
 
+    int userId = getRandomUserId();
+    int invalidUserId = getInvalidRandomUserId();
     @Test
     public void userCart(){
-        int id = 9 ;
-        Response response = given().
-                baseUri("https://dummyjson.com")
-                .pathParam("cartId", id)
-                .contentType(ContentType.JSON)
-                .when().get("/users/{cartId}/carts")
-                .then()
-                .log().all()
-                .extract().response();
+        Response response = activitesApis.UserCart(userId);
         CartResponse returnedResponse = response.body().as(CartResponse.class);
          assertThat(response.statusCode(), equalTo(200));
          assertThat(returnedResponse.getCarts(), notNullValue());
-        assertThat(returnedResponse.getCarts().get(0).getId(), equalTo(id));
+        assertThat(returnedResponse.getCarts().get(0).getId(), equalTo(userId));
         assertThat(returnedResponse.getTotal(),  equalTo(1));
         assertThat(returnedResponse.getSkip(), equalTo(0));
         assertThat(returnedResponse.getLimit(), equalTo(1));
@@ -33,33 +30,17 @@ public class UserActivities {
 
     @Test
     public void NegativeUserCart(){
-        int id = 999 ;
-        Response response = given().
-                baseUri("https://dummyjson.com")
-                .pathParam("userId", id)
-                .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/carts")
-                .then()
-                .log().all()
-                .extract().response();
+        Response response = activitesApis.UserCart(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
-        assertThat(getResponse.getMessage(),equalTo("User with id '999' not found"));
+        assertThat(getResponse.getMessage(),equalTo(String.format("User with id '%d' not found", invalidUserId)));
 
 
     }
 
     @Test
     public void userPosts(){
-        int id = 9 ;
-       Response response =  given().
-                baseUri("https://dummyjson.com")
-                .pathParam("userId", id)
-                .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/posts")
-                .then()
-                .log().all()
-               .extract().response();
+        Response response = activitesApis.UserPosts(userId);
         PostsResponse returnedResponse = response.body().as(PostsResponse.class);
         assertThat(response.statusCode(), equalTo(200));
         assertThat(returnedResponse.getPosts(), notNullValue());
@@ -72,18 +53,10 @@ public class UserActivities {
 
     @Test
     public void NegativeUserPosts(){
-        int id = 999 ;
-         Response response = given().
-                baseUri("https://dummyjson.com")
-                .pathParam("userId", id)
-                .contentType(ContentType.JSON)
-                .when().get("/users/{userId}/posts")
-                .then()
-                .log().all()
-                .extract().response();
+        Response response = activitesApis.UserPosts(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
-        assertThat(getResponse.getMessage(),equalTo("User with id '999' not found"));
+        assertThat(getResponse.getMessage(),equalTo(String.format("User with id '%d' not found", invalidUserId)));
     }
 
 

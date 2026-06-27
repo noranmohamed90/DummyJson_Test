@@ -15,11 +15,12 @@ public class UserInfo {
     private String lastName;
     private String email;
     private int expiresInMins;
-    public   static int id;
+    public    int id;
     private String image;
     private String gender;
     private String accessToken;
     private String refreshToken;
+    private int age;
 
     public UserInfo() {
     }
@@ -28,6 +29,10 @@ public class UserInfo {
         this.username=username;
         this.password=password;
         this.expiresInMins = expiresInMins;
+    }
+    public UserInfo(String firstName,String lastName) {
+       this.firstName=firstName;
+       this.lastName=lastName;
     }
     public String getUsername() {
         return username;

@@ -3,59 +3,57 @@ package com.dummyjson.apis;
 import com.dummyjson.base.Specifications;
 import com.dummyjson.models.UserInfo;
 import com.dummyjson.utilites.Route;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class userApis {
+public class UpdatesApis {
 
-    public static Response Login(UserInfo user){
+    public static Response addUser(UserInfo user){
         return given().
                 spec(Specifications.getReqSpecifications())
                 .body(user)
-                .when().post(Route.LoginPath)
+                .when().post(Route.AddUserPath)
                 .then()
                 .log().all()
                 .extract().response();
     }
-
-
-    public static Response GatAllUsers(){
+    public static Response negativeAddUser(){
         return given().
                 spec(Specifications.getReqSpecifications())
-                .when().get(Route.GetAllUsersPath)
+                .when().get(Route.AddUserPath)
                 .then()
                 .log().all()
                 .extract().response();
     }
 
-    public static Response failGatAllUsers(){
+    public static Response updateUser(UserInfo user ,int id){
         return given().
                 spec(Specifications.getReqSpecifications())
-                .when().post(Route.GetAllUsersPath)
+                .body(user)
+                .pathParam("userId", id)
+                .when().put(Route.updatedUserPath)
                 .then()
                 .log().all()
                 .extract().response();
     }
-
-
-    public static Response GatSingleUser( int id){
+    public static Response negativeUpdateUser(int id){
         return given().
                 spec(Specifications.getReqSpecifications())
-                .when().get(Route.GetSingleUserPath +id)
+                .pathParam("userId", id)
+                .when().put(Route.updatedUserPath)
+                .then()
+                .log().all()
+                .extract().response();
+    }
+    public static Response deleteUser(int id){
+        return given().
+                spec(Specifications.getReqSpecifications())
+                .pathParam("userId", id)
+                .when().delete(Route.deleteUserPath)
                 .then()
                 .log().all()
                 .extract().response();
     }
 
-    public static Response searchUsers(String name){
-        return given().
-                spec(Specifications.getReqSpecifications())
-                .queryParam("q", name)
-                .when().get(Route.searchUserPath )
-                .then()
-                .log().all()
-                .extract().response();
-    }
 }

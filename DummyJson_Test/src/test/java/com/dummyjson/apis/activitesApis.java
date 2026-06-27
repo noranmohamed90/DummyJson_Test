@@ -30,4 +30,14 @@ public class activitesApis {
                 .extract().response();
     }
 
+    public static Response UserTodos(int id){
+        return   given().
+                spec(Specifications.getReqSpecifications())
+                .pathParam("todoId", id)
+                .when().get(Route.GetTodoPath)
+                .then()
+                .log().all()
+                .extract().response();
+    }
+
 }

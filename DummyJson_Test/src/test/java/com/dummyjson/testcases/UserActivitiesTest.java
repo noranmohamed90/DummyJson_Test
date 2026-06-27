@@ -3,7 +3,8 @@ package com.dummyjson.testcases;
 import com.dummyjson.apis.activitesApis;
 import com.dummyjson.models.*;
 import com.dummyjson.utilites.ErrorMessages;
-import io.restassured.http.ContentType;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
@@ -13,11 +14,13 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class UserActivities {
+@Feature("UserActivities Feature")
+public class UserActivitiesTest {
 
     int userId = getRandomUserId();
     int invalidUserId = getInvalidRandomUserId();
-    @Test
+     @Test
+    @Story("UserCart Story")
     public void userCart(){
         Response response = activitesApis.UserCart(userId);
         CartResponse returnedResponse = response.body().as(CartResponse.class);
@@ -30,6 +33,7 @@ public class UserActivities {
     }
 
     @Test
+    @Story("NegativeUserCart Story")
     public void NegativeUserCart(){
         Response response = activitesApis.UserCart(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
@@ -40,6 +44,7 @@ public class UserActivities {
     }
 
     @Test
+    @Story("UserPosts Story")
     public void userPosts(){
         Response response = activitesApis.UserPosts(userId);
         PostsResponse returnedResponse = response.body().as(PostsResponse.class);
@@ -53,8 +58,27 @@ public class UserActivities {
     }
 
     @Test
+    @Story("Negative UserPosts Story")
     public void NegativeUserPosts(){
         Response response = activitesApis.UserPosts(invalidUserId);
+        Errors getResponse =response.body().as(Errors.class);
+        assertThat(response.statusCode(),equalTo(404));
+        assertThat(getResponse.getMessage(),equalTo(String.format(ErrorMessages.invalidUsersMessage, invalidUserId)));
+    }
+    @Test
+    @Story("UserTodo Story")
+    public void userTodos(){
+        Response response = activitesApis.UserTodos(userId);
+        TodoResponse returnedResponse = response.body().as(TodoResponse.class);
+        assertThat(response.statusCode(), equalTo(200));
+        assertThat(returnedResponse.getTodos().size(),notNullValue());
+        assertThat(returnedResponse.getTodos().get(0).getId(), notNullValue());
+    }
+
+    @Test
+    @Story("Negative UserTodo Story")
+    public void NegativeUserTodos(){
+        Response response = activitesApis.UserTodos(invalidUserId);
         Errors getResponse =response.body().as(Errors.class);
         assertThat(response.statusCode(),equalTo(404));
         assertThat(getResponse.getMessage(),equalTo(String.format(ErrorMessages.invalidUsersMessage, invalidUserId)));

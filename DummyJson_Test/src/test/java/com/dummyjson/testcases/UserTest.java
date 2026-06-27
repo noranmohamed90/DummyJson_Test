@@ -37,7 +37,7 @@ public class UserTest {
     @Test
     @Story("LoginFailed Story")
     public void NegativeLoginUserTC(){
-        UserInfo user =new UserInfo("emilys","emilysss",30);
+        UserInfo user =new UserInfo("emilys","emily",30);
         int userId = user.getId();
         Response response = userApis.Login(user);
         Errors getResponse =response.body().as(Errors.class);

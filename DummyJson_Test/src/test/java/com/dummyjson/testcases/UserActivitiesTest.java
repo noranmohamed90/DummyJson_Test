@@ -10,7 +10,6 @@ import org.testng.annotations.Test;
 
 import static com.dummyjson.utilites.generateIds.getInvalidRandomUserId;
 import static com.dummyjson.utilites.generateIds.getRandomUserId;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

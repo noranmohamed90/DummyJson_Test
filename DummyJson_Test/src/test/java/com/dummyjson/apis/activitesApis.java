@@ -1,9 +1,7 @@
 package com.dummyjson.apis;
 
 import com.dummyjson.base.Specifications;
-import com.dummyjson.models.UserInfo;
 import com.dummyjson.utilites.Route;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;

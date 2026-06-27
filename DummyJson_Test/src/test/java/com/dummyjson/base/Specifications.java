@@ -1,6 +1,5 @@
 package com.dummyjson.base;
 
-import com.dummyjson.utilites.Route;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
